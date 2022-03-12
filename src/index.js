@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import ListUser from './ListUser';
+
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <ListUser />
+    <App />
+    {/* <ListUser /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

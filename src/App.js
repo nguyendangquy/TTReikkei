@@ -1,5 +1,5 @@
 
-import { useEffect,useState} from 'react'
+import { useMemo,useEffect,useState, useRef} from 'react'
 
 
 function App() {
@@ -45,7 +45,17 @@ function App() {
     const [age, setAge] = useState('')
     const [id, setId] = useState()
     const [userEdit, setUserEdit] = useState({id:null})
-    
+    const [searchName, setSearchName] = useState("");
+    const inputReft = useRef()
+  
+    const getUsers = (list) => {
+        let res = [...list];
+        if (searchName) {
+             res = res.filter((el) =>  el.name.includes(searchName))
+        }
+        return res
+    }
+
     const handleAdd = () => {
         if(change === 'React') {
             setReact([...memReact, {
@@ -65,6 +75,7 @@ function App() {
         
         setName('')
         setAge('')
+        inputReft.current.focus()
 
         let ids = id+1
         setId(ids)
@@ -106,7 +117,7 @@ function App() {
         setAge(user.age)
         setUserEdit(user)
         setChange(user.type)
-        
+        inputReft.current.focus()
     
     }
     const handleChange = () => {
@@ -139,19 +150,37 @@ function App() {
         setUserEdit({id:null})
         setName('')
         setAge('')
+        inputReft.current.focus()
     }
+
+    const handleDeleteReact = (index) => {
+        setReact((prevReact) => {
+            const newMemReact = prevReact.filter((item, id) => id !== index)
+            return newMemReact
+        })
+    }
+    const handleDeleteJava = (index) => {
+        setJava((prevJava) => {
+            const newMemJava = prevJava.filter((item, id) => id !== index)
+            return newMemJava
+        })
+    } 
     return (
         <div style={{padding: 20}}>
             <label>Name </label>
-            <input placeholder='Enter name' value={name} onChange={(e)=>setName(e.target.value) }/>
+            <input placeholder='Enter name' ref = {inputReft} value={name} onChange={(e)=>setName(e.target.value) }/>
             <label>Age </label>
-            <input placeholder='Enter age' value={age} onChange={(e)=>setAge(e.target.value) }/>
+            <input placeholder='Enter age'  value={age} onChange={(e)=>setAge(e.target.value) }/>
             <select onChange={hanleChange}>
                 <option value='React'>React</option>
                 <option value="Java">Java</option>
             </select>
             <br/>
             {userEdit.id ? <button onClick= {handleChange}>Change member</button>:<button onClick={handleAdd}>Add member</button>} 
+            search name: <input
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            ></input>
             <h1>List member of React</h1>
             <ul>
                 { memReact.length > 0 ?
@@ -160,9 +189,13 @@ function App() {
                            name: {member.name} -age: {member.age} 
                            <button onClick={() => handleTranfer(member)}>Tranfer</button>
                            <button onClick = {() =>handleEdit(member)}>Edit</button>
+                           <button onClick={() =>handleDeleteReact(index)}>Delete</button>
                         </li>
                     ))
-                : 'class empty'}
+                    
+                : 'class empty'
+                }
+                
             </ul>
             <h1>List member of Java</h1>
             <ul>
@@ -172,6 +205,7 @@ function App() {
                             name: {member.name} - age: {member.age} 
                             <button onClick={() => handleTranfer(member)}>Tranfer</button>
                             <button onClick = {() =>handleEdit(member)}>Edit</button>
+                            <button onClick={() =>handleDeleteJava(index)}>Delete</button>
                         </li>
                        
                     ))
