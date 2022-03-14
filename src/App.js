@@ -1,5 +1,8 @@
 
-import { useMemo,useEffect,useState, useRef} from 'react'
+import { useEffect,useState, useRef} from 'react'
+import { Routes, Route,Link } from 'react-router-dom'
+import AddMember from './pages/AddMember'
+import EditMember from './pages/EditMember'
 
 
 function App() {
@@ -167,6 +170,12 @@ function App() {
     } 
     return (
         <div style={{padding: 20}}>
+            <Link to = "/">Add member</Link>
+            <Link to = "/edit">Edit member</Link>
+            <Routes>
+                <Route path='/' element = {<AddMember/>}/>
+                <Route path='/edit' element = {<EditMember/>}/>
+            </Routes>
             <label>Name </label>
             <input placeholder='Enter name' ref = {inputReft} value={name} onChange={(e)=>setName(e.target.value) }/>
             <label>Age </label>
@@ -211,7 +220,7 @@ function App() {
                     ))
                 : 'class empty'}
             </ul>
-         
+                        
         </div>
     )
 }
